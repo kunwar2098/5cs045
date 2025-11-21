@@ -142,7 +142,7 @@ $history_books = $stmt->get_result();
 // --- LOGOUT ---
 if (isset($_GET['logout'])) {
     session_destroy();
-    header("Location: index.php");
+    header("Location: 5cs045.php");
     exit;
 }
 
@@ -221,7 +221,7 @@ echo render('php://memory', get_defined_vars());
                 </div>
                 <div class="col-md-3">
                     <button type="submit" class="btn btn-primary me-2"><i class="bi bi-search"></i> Search</button>
-                    <a href="index.php" class="btn btn-secondary">Clear</a>
+                    <a href="5cs045.php" class="btn btn-secondary">Clear</a>
                 </div>
             </form>
         </div>
@@ -285,7 +285,7 @@ echo render('php://memory', get_defined_vars());
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalTitle">Add New Book</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="resetBook()"></button>
         </div>
         <div class="modal-body">
           <input type="hidden" name="action" value="add" id="formAction">
@@ -297,7 +297,7 @@ echo render('php://memory', get_defined_vars());
           <div class="mb-3"><label class="form-label">ISBN</label><input type="text" name="isbn" class="form-control"></div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="resetBook()">Cancel</button>
           <button type="submit" class="btn btn-primary">Save Book</button>
         </div>
       </div>
@@ -318,12 +318,24 @@ function editBook(book) {
     document.querySelector('[name="isbn"]').value = book.isbn;
 }
 
+
+function resetBook() {
+    document.getElementById('modalTitle').textContent = 'Add New Book';
+    document.getElementById('formAction').value = 'add';
+    document.getElementById('bookId').value = "";
+    document.querySelector('[name="title"]').value = "";
+    document.querySelector('[name="author"]').value = "";
+    document.querySelector('[name="genre"]').value = "History";
+    document.querySelector('[name="year"]').value = "";
+    document.querySelector('[name="isbn"]').value = "";
+}
+
 document.getElementById('searchInput').addEventListener('input', function(e) {
     let val = this.value;
     let sugg = document.getElementById('suggestions');
     if (val.length < 2) { sugg.style.display='none'; return; }
     
-    fetch(`index.php?autocomplete=1&term=${encodeURIComponent(val)}`)
+    fetch(`5cs045.php?autocomplete=1&term=${encodeURIComponent(val)}`)
         .then(r => r.json())
         .then(data => {
             sugg.innerHTML = '';
